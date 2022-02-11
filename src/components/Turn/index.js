@@ -7,77 +7,61 @@ import { Context } from "../../context";
 import Button from "../Button";
 
 // Utilities
-import { farkelCheck } from "../../scoring";
-
-// const scoring = {
-//   1: 100,
-//   5: 50,
-//   "Three 1s": 300,
-//   "Three 2s": 200,
-//   "Three 3s": 300,
-//   "Three 4s": 400,
-//   "Three 5s": 500,
-//   "Three 6s": 600,
-//   "4 of a kind": 1000,
-//   "straight 1-6": 1500,
-//   "three pairs": 1500,
-//   "5 of a kind": 2000,
-//   "two triplets": 2500,
-//   "6 of a kind": 3000,
-// };
+import { farkelCheck, sortDice, getScore } from "../../scoring";
 
 const Turn = () => {
   const [players, setPlayers, active, setActive] = useContext(Context);
+  // This keeps track of the score for a single turn
   const [score, setScore] = useState(0);
+  // This keeps track of how many dice are available to roll
   const [activeDice, setActiveDice] = useState(6);
+  // this is an array of each roll
   const [roll, setRoll] = useState([]);
+  // this is an array of the dice selected for scoring
   const [selected, setSelected] = useState([]);
+  // Rolling is true when the player has the option to roll
   const [rolling, setRolling] = useState(true);
+  // Scoring is true when the player has the option to score points after a roll
   const [scoring, setScoring] = useState(false);
+  // farkel is true when no points can be scored in a roll. Turn ends without scoring.
   const [farkel, setFarkel] = useState(false);
 
-  const rollDice = () => {
+  // receives the number of active dice and generates the roll, sorts, and checks for farkel;
+  const rollDice = async () => {
     setRolling(false);
     setScoring(true);
     //generate dice numbers
+    const turn = [];
     if (activeDice > 0) {
-      const turn = [];
       for (let i = 1; i <= activeDice; i++) {
         let curRoll = Math.floor(Math.random() * 6 + 1);
         turn.push(curRoll);
       }
-      setRoll(turn);
     }
+    // Sort dice for Farkel check;
+    const sorted = await sortDice(turn);
+    // Check for Farkel
+    const farkeled = await farkelCheck(sorted);
+
+    farkeled ? setFarkel(true) : setRoll(turn);
   };
 
-  const scoreRoll = () => {
-    // Sort dice rolls for scoring
-    const sorted = [[], [], [], [], [], []];
-    selected.forEach((dice) => {
-      dice == 1
-        ? sorted[0].push(dice)
-        : dice == 2
-        ? sorted[1].push(dice)
-        : dice == 3
-        ? sorted[2].push(dice)
-        : dice == 4
-        ? sorted[3].push(dice)
-        : dice == 5
-        ? sorted[4].push(dice)
-        : sorted[5].push(dice);
-    });
+  const scoreRoll = async () => {
+    console.log(selected, "selected");
+    // Sort selected dice for scoring:
+    const sorted = await sortDice(selected);
 
-    // Check for Farkel
-    if (farkelCheck(sorted)) {
-      setFarkel(true);
-      return;
+    const { points, remove } = await getScore(sorted);
+
+    console.log(points, "points", remove, "remove");
+
+    // Set score and remove dice that are scoring:
+    setScore(score + points);
+    if (activeDice - remove == 0) {
+      setActiveDice(6);
+    } else {
+      setActiveDice(activeDice - remove);
     }
-
-    // Helper function to set score and remove dice that are scoring:
-    const setRollScore = (points, removeDice) => {
-      setScore(score + points);
-      setActiveDice(activeDice - removeDice);
-    };
 
     // reset for next round of scoring
     setSelected([]);
@@ -86,26 +70,47 @@ const Turn = () => {
     setRoll([]);
   };
 
+  // add dice to selected arr and remove it from the roll arr
+  const selectDice = (event) => {
+    setSelected([...selected, event.currentTarget.innerText]);
+    const index = event.target.id;
+    const updatedRoll = roll.slice();
+    updatedRoll.splice(index, 1);
+    console.log(updatedRoll);
+    setRoll(updatedRoll);
+  };
+
   return (
     <div className="turn">
-      {rolling && <Button text="Roll" callback={rollDice} id="roll-button" />}
+      {rolling && (
+        <Button
+          text={`Roll ${activeDice} dice`}
+          callback={rollDice}
+          id="roll-button"
+        />
+      )}
       <div>
         {roll.map((dice, index) => {
           return (
-            <button
-              key={index}
-              onClick={(event) => {
-                setSelected([...selected, event.currentTarget.innerText]);
-              }}
-            >
+            <button key={index} id={index} onClick={selectDice}>
               {dice}
             </button>
           );
         })}
       </div>
-      {scoring && (
+      <div>
+        {selected.map((dice, index) => {
+          return (
+            <button key={index} onClick={selectDice}>
+              {dice}
+            </button>
+          );
+        })}
+      </div>
+      {scoring && !farkel && (
         <Button text="Score Role" callback={scoreRoll} id="score-button" />
       )}
+      {farkel && <h2>FARKEL!</h2>}
       <h3>Round Score: {score}</h3>
     </div>
   );
