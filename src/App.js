@@ -12,7 +12,13 @@ import Game from "./components/Game";
 
 function App() {
   const [_players, _setPlayers, active, _setActive] = useContext(Context);
-  return <div className="App">{!active ? <Home /> : <Game />}</div>;
+  return (
+    <div className="App">
+      <div className="header"></div>
+      <h1>FARKEL</h1>
+      <div>{!active ? <Home /> : <Game />}</div>
+    </div>
+  );
 }
 
 export default App;

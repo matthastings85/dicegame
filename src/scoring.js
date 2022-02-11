@@ -97,6 +97,11 @@ export const getScore = (sorted) => {
     return { points, remove };
   }
   if (fourOfAKind.length == 1) {
+    if (pairs.length == 1) {
+      points = points + 1500;
+      remove = remove + 0;
+      return { points, remove };
+    }
     points = points + 1000;
     remove = remove + 4;
     check1s5s(4);

@@ -28,32 +28,24 @@ const Home = () => {
     setPlayers(playerArr);
     setActive(true);
     console.log("Load Game");
-    console.log(players);
   };
 
   return (
-    <div>
-      <h1>Wecome to Beauregard!</h1>
-      {!active ? (
-        <div>
-          <input
-            type="text"
-            placeholder="Enter Player Name"
-            onChange={(event) => setInput(event.currentTarget.value)}
-            onKeyUp={(event) => {
-              if (event.key === "Enter") {
-                event.preventDefault();
-                addPlayer();
-              }
-            }}
-            value={input}
-          />
-          <Button id="add-player" text="Add Player" callback={addPlayer} />
-          <Button text="Load New Game" callback={loadGame} />
-        </div>
-      ) : (
-        <h2>Let's Begin!</h2>
-      )}
+    <div className="home-wrapper">
+      <h1>Wecome to Farkel!</h1>
+      <input
+        type="text"
+        placeholder="Enter Player Name"
+        onChange={(event) => setInput(event.currentTarget.value)}
+        onKeyUp={(event) => {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            addPlayer();
+          }
+        }}
+        value={input}
+      />
+      <Button id="add-player" text="Add Player" callback={addPlayer} />
       <ul id="player-list">
         {playerArr.map((player) => {
           return (
@@ -63,6 +55,7 @@ const Home = () => {
           );
         })}
       </ul>
+      <Button text="Load New Game" callback={loadGame} />
     </div>
   );
 };

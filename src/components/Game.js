@@ -6,8 +6,7 @@ import Turn from "./Turn";
 
 const Game = () => {
   return (
-    <div>
-      <h1>Let's Begin</h1>
+    <div className="game-wrapper">
       <Scorecard />
       <Turn />
     </div>

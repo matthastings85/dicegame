@@ -10,7 +10,7 @@ import Button from "../Button";
 import { farkelCheck, sortDice, getScore } from "../../scoring";
 
 const Turn = () => {
-  const [players, setPlayers, active, setActive] = useContext(Context);
+  const [players, setPlayers, _active, _setActive] = useContext(Context);
   // This keeps track of the score for a single turn
   const [score, setScore] = useState(0);
   // This keeps track of how many dice are available to roll
@@ -26,6 +26,12 @@ const Turn = () => {
   // farkel is true when no points can be scored in a roll. Turn ends without scoring.
   const [farkel, setFarkel] = useState(false);
 
+  // Player information
+  const playersCopy = players.slice();
+  const playerIndex = playersCopy.findIndex((player) => player.myTurn);
+  const activeName = playersCopy[playerIndex].name;
+  const startRoundScore = playersCopy[playerIndex].score;
+
   // receives the number of active dice and generates the roll, sorts, and checks for farkel;
   const rollDice = async () => {
     setRolling(false);
@@ -38,12 +44,16 @@ const Turn = () => {
         turn.push(curRoll);
       }
     }
+    setRoll(turn);
+
     // Sort dice for Farkel check;
     const sorted = await sortDice(turn);
-    // Check for Farkel
+    // Check for Farkel and set roll
     const farkeled = await farkelCheck(sorted);
-
-    farkeled ? setFarkel(true) : setRoll(turn);
+    if (farkeled) {
+      setFarkel(true);
+      setScore(0);
+    }
   };
 
   const scoreRoll = async () => {
@@ -80,8 +90,34 @@ const Turn = () => {
     setRoll(updatedRoll);
   };
 
+  const finishTurn = () => {
+    // Set player score
+    playersCopy[playerIndex].score = startRoundScore + score;
+    // Change 'myTurn' to next player
+    if (playerIndex === playersCopy.length - 1) {
+      playersCopy[0].myTurn = true;
+      //Set 'myTurn' of current player to 'false'
+      playersCopy[playerIndex].myTurn = false;
+    } else {
+      playersCopy[playerIndex + 1].myTurn = true;
+      playersCopy[playerIndex].myTurn = false;
+    }
+    // Update player Context
+    setPlayers(playersCopy);
+
+    // Reset for next player
+    setScore(0);
+    setActiveDice(6);
+    setRoll([]);
+    setSelected([]);
+    setRolling(true);
+    setScoring(false);
+    setFarkel(false);
+  };
+
   return (
     <div className="turn">
+      <h2>{`It is ${activeName}'s turn`}</h2>
       {rolling && (
         <Button
           text={`Roll ${activeDice} dice`}
@@ -108,10 +144,15 @@ const Turn = () => {
         })}
       </div>
       {scoring && !farkel && (
-        <Button text="Score Role" callback={scoreRoll} id="score-button" />
+        <Button text="Score Selected" callback={scoreRoll} id="score-button" />
       )}
       {farkel && <h2>FARKEL!</h2>}
-      <h3>Round Score: {score}</h3>
+      <h3>Round Score: {farkel ? 0 : score}</h3>
+      {farkel || score > 0 ? (
+        <Button text="Finish Turn" callback={finishTurn} id="finish-btn" />
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 };
