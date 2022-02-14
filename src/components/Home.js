@@ -12,13 +12,18 @@ const Home = () => {
   const [playerArr, setPlayerArr] = useState([]);
 
   const addPlayer = () => {
+    if (input === "") {
+      return;
+    }
     // Create a state object for each player.
     let player = {
       player: playerArr.length + 1,
       name: input,
       score: 0,
       myTurn: false,
+      endGame: false,
     };
+
     setPlayerArr([...playerArr, player]);
     setInput("");
   };
@@ -32,7 +37,7 @@ const Home = () => {
 
   return (
     <div className="home-wrapper">
-      <h1>Wecome to Farkel!</h1>
+      <h4>Add 2 or more players to begin</h4>
       <input
         type="text"
         placeholder="Enter Player Name"
@@ -46,6 +51,7 @@ const Home = () => {
         value={input}
       />
       <Button id="add-player" text="Add Player" callback={addPlayer} />
+      {playerArr.length > 0 && <h3>Players</h3>}
       <ul id="player-list">
         {playerArr.map((player) => {
           return (
@@ -55,7 +61,9 @@ const Home = () => {
           );
         })}
       </ul>
-      <Button text="Load New Game" callback={loadGame} />
+      {playerArr.length > 1 && (
+        <Button text="Load New Game" callback={loadGame} />
+      )}
     </div>
   );
 };

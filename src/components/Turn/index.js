@@ -8,9 +8,11 @@ import Button from "../Button";
 
 // Utilities
 import { farkelCheck, sortDice, getScore } from "../../scoring";
+import { one, two, three, four, five, six } from "../../utilities";
 
 const Turn = () => {
-  const [players, setPlayers, _active, _setActive] = useContext(Context);
+  const [players, setPlayers, _active, _setActive, gameOver, setGameOver] =
+    useContext(Context);
   // This keeps track of the score for a single turn
   const [score, setScore] = useState(0);
   // This keeps track of how many dice are available to roll
@@ -31,6 +33,21 @@ const Turn = () => {
   const playerIndex = playersCopy.findIndex((player) => player.myTurn);
   const activeName = playersCopy[playerIndex].name;
   const startRoundScore = playersCopy[playerIndex].score;
+  let winner;
+
+  // Check for game over
+  if (playersCopy[playerIndex].endGame) {
+    let max = 0;
+    let maxIndex = 0;
+    for (let i = 0; i < playersCopy.length; i++) {
+      if (playersCopy[i].score > max) {
+        max = playersCopy[i].score;
+        maxIndex = i;
+      }
+    }
+    winner = playersCopy[maxIndex].name;
+    setGameOver(true);
+  }
 
   // receives the number of active dice and generates the roll, sorts, and checks for farkel;
   const rollDice = async () => {
@@ -67,7 +84,7 @@ const Turn = () => {
 
     // Set score and remove dice that are scoring:
     setScore(score + points);
-    if (activeDice - remove == 0) {
+    if (activeDice - remove === 0) {
       setActiveDice(6);
     } else {
       setActiveDice(activeDice - remove);
@@ -81,13 +98,14 @@ const Turn = () => {
   };
 
   // add dice to selected arr and remove it from the roll arr
-  const selectDice = (event) => {
-    setSelected([...selected, event.currentTarget.innerText]);
+  const selectDice = async (event) => {
     const index = event.target.id;
     const updatedRoll = roll.slice();
-    updatedRoll.splice(index, 1);
-    console.log(updatedRoll);
+    const spliced = updatedRoll.splice(index, 1);
+
+    await setSelected([...selected, spliced]);
     setRoll(updatedRoll);
+    console.log(selected, "selected");
   };
 
   const finishTurn = () => {
@@ -102,6 +120,11 @@ const Turn = () => {
       playersCopy[playerIndex + 1].myTurn = true;
       playersCopy[playerIndex].myTurn = false;
     }
+    // Check to see if current player has reached 10,000 points - set endGame to true
+    if (playersCopy[playerIndex].score >= 10000) {
+      playersCopy[playerIndex].endGame = true;
+    }
+
     // Update player Context
     setPlayers(playersCopy);
 
@@ -116,42 +139,89 @@ const Turn = () => {
   };
 
   return (
-    <div className="turn">
-      <h2>{`It is ${activeName}'s turn`}</h2>
-      {rolling && (
-        <Button
-          text={`Roll ${activeDice} dice`}
-          callback={rollDice}
-          id="roll-button"
-        />
-      )}
-      <div>
-        {roll.map((dice, index) => {
-          return (
-            <button key={index} id={index} onClick={selectDice}>
-              {dice}
-            </button>
-          );
-        })}
-      </div>
-      <div>
-        {selected.map((dice, index) => {
-          return (
-            <button key={index} onClick={selectDice}>
-              {dice}
-            </button>
-          );
-        })}
-      </div>
-      {scoring && !farkel && (
-        <Button text="Score Selected" callback={scoreRoll} id="score-button" />
-      )}
-      {farkel && <h2>FARKEL!</h2>}
-      <h3>Round Score: {farkel ? 0 : score}</h3>
-      {farkel || score > 0 ? (
-        <Button text="Finish Turn" callback={finishTurn} id="finish-btn" />
+    <div className="turn-container">
+      {!gameOver ? (
+        <div className="turn">
+          <h2>{`Current Player: ${activeName}`}</h2>
+          <h3>Round Score: {farkel ? 0 : score}</h3>
+          {rolling && (
+            <Button
+              text={`Roll ${activeDice} dice`}
+              callback={rollDice}
+              id="roll-button"
+            />
+          )}
+          {roll.length > 0 && <h3>Current Roll</h3>}
+          <div className="dice-container">
+            {roll.map((dice, index) => {
+              let displayRoll;
+              dice == 1
+                ? (displayRoll = one)
+                : dice == 2
+                ? (displayRoll = two)
+                : dice == 3
+                ? (displayRoll = three)
+                : dice == 4
+                ? (displayRoll = four)
+                : dice == 5
+                ? (displayRoll = five)
+                : (displayRoll = six);
+              return (
+                <div
+                  className="click-div m-5"
+                  key={index}
+                  id={index}
+                  onClick={selectDice}
+                >
+                  {displayRoll}
+                </div>
+              );
+            })}
+          </div>
+          {roll.length > 0 && !farkel && <h4>select dice for scoring</h4>}
+          {farkel && <h2 className="purple font-large">FARKEL!</h2>}
+          {selected.length > 0 && <h3>Selected for scoring</h3>}
+          <div className="dice-container">
+            {selected.map((dice, index) => {
+              let display;
+              dice == 1
+                ? (display = one)
+                : dice == 2
+                ? (display = two)
+                : dice == 3
+                ? (display = three)
+                : dice == 4
+                ? (display = four)
+                : dice == 5
+                ? (display = five)
+                : (display = six);
+              return (
+                <div className="m-5" key={index}>
+                  {display}
+                </div>
+              );
+            })}
+          </div>
+          {scoring && !farkel && selected.length > 0 && (
+            <Button
+              text="Score Selected"
+              callback={scoreRoll}
+              id="score-button"
+            />
+          )}
+          {farkel ||
+          (!scoring && score > 0 && startRoundScore >= 500) ||
+          (!scoring && score >= 500) ? (
+            <Button text="Finish Turn" callback={finishTurn} id="finish-btn" />
+          ) : (
+            <div></div>
+          )}
+        </div>
       ) : (
-        <div></div>
+        <div>
+          <h2>Game Over</h2>
+          <h1>{`The winner is ${winner}`}</h1>
+        </div>
       )}
     </div>
   );

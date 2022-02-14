@@ -6,11 +6,13 @@ $green: #84b026;
 $purple: #a660eb;
 $white: #f2f2f2;
 
+body {
+  background-color: $darkGrey;
+}
+
 .App {
   margin: 0;
   width: 100%;
-  height: 100%;
-  background-color: $darkGrey;
   text-align: center;
   color: $white;
   font-size: 1.2rem;
@@ -18,13 +20,17 @@ $white: #f2f2f2;
 
 .header {
   width: 100%;
-  height: 30px;
+  height: 20px;
   background-color: $purple;
 }
-
+.heading {
+  margin: 0;
+  margin-bottom: 20px;
+  border-bottom: 1px solid $lightGrey;
+}
 @mixin btn {
   display: block;
-  min-width: 350px;
+  width: 350px;
   padding: 15px;
   margin: 10px;
   font-size: 1.5rem;
@@ -37,6 +43,11 @@ button {
   background-color: $purple;
   color: $white;
   box-shadow: 0 0 1px 2px $lightGrey;
+  cursor: pointer;
+}
+
+button:hover {
+  box-shadow: 0 0 1px 5px $lightGrey;
 }
 
 @mixin wrapper {
@@ -55,23 +66,197 @@ button {
   ul {
     list-style-type: none;
     padding: 0;
+    margin: 0 0 10px 0;
   }
   li {
     text-align: left;
   }
-}
-
-.scorecard {
-  background-color: $lightGrey;
-  color: $darkGrey;
-  padding: 20px;
 
   h3 {
-    margin: 0;
-    padding: 0;
+    margin: 10px;
   }
 }
 
+.scorecard {
+  color: $purple;
+  padding: 10px;
+  width: 28%;
+  border: 1px solid $grey;
+  border-radius: 10px;
+}
+
+.instructions-wrapper {
+  width: 28%;
+  border: 1px solid $grey;
+  border-radius: 10px;
+  padding: 10px;
+
+  .grid {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    gap: 10px;
+
+    .col-l {
+      display: flex;
+      justify-content: flex-end;
+    }
+    .col-r {
+      display: flex;
+    }
+  }
+}
 .game-wrapper {
+  display: flex;
+  justify-content: space-around;
+}
+
+.turn-container {
   @include wrapper;
+  width: 40%;
+  border: 1px solid $grey;
+  border-radius: 10px;
+}
+
+.turn {
+  @include wrapper;
+
+  h2 {
+    margin: 15px 0 10px 0;
+  }
+
+  h4 {
+    color: $lightGrey;
+    margin: 0;
+  }
+}
+
+// Dice Styling
+.dice-container {
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.click-div {
+  cursor: pointer;
+  border-radius: 10%;
+  animation: spin 0.3s 3 linear, scale 0.3s 3 ease-out;
+}
+.click-div:hover {
+  border: 2px solid $lightGrey;
+}
+
+@keyframes scale {
+  0% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(20px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+  75% {
+    transform: translateY(20px);
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(180deg);
+  }
+}
+
+.m-5 {
+  margin: 5px;
+}
+
+.dice {
+  padding: 4px;
+  background-color: $purple;
+  width: 58px;
+  height: 58px;
+  border-radius: 10%;
+  pointer-events: none;
+
+  .dot {
+    display: block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: white;
+    pointer-events: none;
+  }
+}
+.small-dice {
+  padding: 2px;
+  background-color: $purple;
+  width: 20px;
+  height: 20px;
+  border-radius: 10%;
+  margin: 2px;
+  pointer-events: none;
+
+  .small-dot {
+    display: block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: white;
+    pointer-events: none;
+  }
+}
+.first-face {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.second-face {
+  display: flex;
+  justify-content: space-between;
+}
+.second-face .dot:nth-of-type(2) {
+  align-self: flex-end;
+}
+.second-face .small-dot:nth-of-type(2) {
+  align-self: flex-end;
+}
+.third-face {
+  display: flex;
+  justify-content: space-between;
+}
+.third-face .dot:nth-of-type(2) {
+  align-self: center;
+}
+.third-face .dot:nth-of-type(1) {
+  align-self: flex-end;
+}
+.third-face .small-dot:nth-of-type(2) {
+  align-self: center;
+}
+.third-face .small-dot:nth-of-type(1) {
+  align-self: flex-end;
+}
+
+.face {
+  display: flex;
+  justify-content: space-between;
+}
+.column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.mid {
+  justify-content: center;
+}
+
+// Text styling
+.purple {
+  color: $purple;
+}
+
+.font-large {
+  font-size: 4rem;
 }

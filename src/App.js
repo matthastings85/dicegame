@@ -15,7 +15,7 @@ function App() {
   return (
     <div className="App">
       <div className="header"></div>
-      <h1>FARKEL</h1>
+      <h1 className="heading">FARKEL</h1>
       <div>{!active ? <Home /> : <Game />}</div>
     </div>
   );
