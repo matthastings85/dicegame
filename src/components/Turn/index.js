@@ -5,6 +5,7 @@ import { Context } from "../../context";
 
 // Components
 import Button from "../Button";
+import TurnTransition from "../TurnTransition";
 
 // Utilities
 import { farkelCheck, sortDice, getScore } from "../../scoring";
@@ -27,6 +28,8 @@ const Turn = () => {
   const [scoring, setScoring] = useState(false);
   // farkel is true when no points can be scored in a roll. Turn ends without scoring.
   const [farkel, setFarkel] = useState(false);
+  // Transition screen to show scores and next player
+  const [transition, setTransition] = useState(false);
 
   // Player information
   const playersCopy = players.slice();
@@ -74,13 +77,10 @@ const Turn = () => {
   };
 
   const scoreRoll = async () => {
-    console.log(selected, "selected");
     // Sort selected dice for scoring:
     const sorted = await sortDice(selected);
 
     const { points, remove } = await getScore(sorted);
-
-    console.log(points, "points", remove, "remove");
 
     // Set score and remove dice that are scoring:
     setScore(score + points);
@@ -99,13 +99,15 @@ const Turn = () => {
 
   // add dice to selected arr and remove it from the roll arr
   const selectDice = async (event) => {
+    if (farkel) {
+      return;
+    }
     const index = event.target.id;
     const updatedRoll = roll.slice();
     const spliced = updatedRoll.splice(index, 1);
 
     await setSelected([...selected, spliced]);
     setRoll(updatedRoll);
-    console.log(selected, "selected");
   };
 
   const finishTurn = () => {
@@ -128,7 +130,7 @@ const Turn = () => {
     // Update player Context
     setPlayers(playersCopy);
 
-    // Reset for next player
+    // Reset for next player & move to transition screen
     setScore(0);
     setActiveDice(6);
     setRoll([]);
@@ -136,11 +138,12 @@ const Turn = () => {
     setRolling(true);
     setScoring(false);
     setFarkel(false);
+    setTransition(true);
   };
 
   return (
     <div className="turn-container">
-      {!gameOver ? (
+      {!gameOver && !transition && (
         <div className="turn">
           <h2>{`Current Player: ${activeName}`}</h2>
           <h3>Round Score: {farkel ? 0 : score}</h3>
@@ -217,7 +220,11 @@ const Turn = () => {
             <div></div>
           )}
         </div>
-      ) : (
+      )}
+      {transition && !gameOver && (
+        <TurnTransition callback={setTransition} player={activeName} />
+      )}
+      {gameOver && (
         <div>
           <h2>Game Over</h2>
           <h1>{`The winner is ${winner}`}</h1>

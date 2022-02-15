@@ -32,7 +32,6 @@ const Home = () => {
     playerArr[0].myTurn = true;
     setPlayers(playerArr);
     setActive(true);
-    console.log("Load Game");
   };
 
   return (
@@ -62,7 +61,7 @@ const Home = () => {
         })}
       </ul>
       {playerArr.length > 1 && (
-        <Button text="Load New Game" callback={loadGame} />
+        <Button text="Start New Game" callback={loadGame} />
       )}
     </div>
   );

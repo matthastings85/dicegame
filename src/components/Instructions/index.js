@@ -1,79 +1,92 @@
-import React from "react";
+import React, { useState } from "react";
 
-import {
-  oneSmall,
-  twoSmall,
-  threeSmall,
-  fourSmall,
-  fiveSmall,
-  sixSmall,
-} from "../../utilities";
+// Components
+import { Tooltip, Popover, Typography } from "@mui/material";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+// Icon
+import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons";
 
 const Instructions = () => {
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popover" : undefined;
+
   return (
-    <div className="instructions-wrapper">
-      <h3>Scoring</h3>
-      <div className="grid">
-        <div className="col-l">{oneSmall}=100 points</div>
-        <div className="col-r">{fiveSmall}=50 points</div>
-        <div className="col-l">
-          {oneSmall}
-          {oneSmall}
-          {oneSmall}
-        </div>
-        <div className="col-r">300 points</div>
-        <div className="col-l">
-          {twoSmall}
-          {twoSmall}
-          {twoSmall}
-        </div>
-        <div className="col-r">200 points</div>
-        <div className="col-l">
-          {threeSmall}
-          {threeSmall}
-          {threeSmall}
-        </div>
-        <div className="col-r">300 points</div>
-        <div className="col-l">
-          {fourSmall}
-          {fourSmall}
-          {fourSmall}
-        </div>
-        <div className="col-r">400 points</div>
-        <div className="col-l">
-          {fiveSmall}
-          {fiveSmall}
-          {fiveSmall}
-        </div>
-        <div className="col-r">500 points</div>
-        <div className="col-l">
-          {sixSmall}
-          {sixSmall}
-          {sixSmall}
-        </div>
-        <div className="col-r">600 points</div>
-        <div className="col-l">4-of-a-kind</div>
-        <div className="col-r">1000 points</div>
-        <div className="col-l">
-          {oneSmall}
-          {twoSmall}
-          {threeSmall}
-          {fourSmall}
-          {fiveSmall}
-          {sixSmall}
-        </div>
-        <div className="col-r">1500 points</div>
-        <div className="col-l">Three pairs</div>
-        <div className="col-r">1500 points</div>
-        <div className="col-l">5-of-a-kind</div>
-        <div className="col-r">2000 points</div>
-        <div className="col-l">Two triplets</div>
-        <div className="col-r">2500 points</div>
-        <div className="col-l">6-of-a-kind</div>
-        <div className="col-r">3000 points</div>
-      </div>
-    </div>
+    <>
+      <Tooltip title="Instructions" placement="bottom" arrow>
+        <button
+          className="no-styles"
+          onClick={handleClick}
+          aria-describedby={id}
+        >
+          <FontAwesomeIcon icon={faCircleQuestion} size="lg" id="question" />
+        </button>
+      </Tooltip>
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+      >
+        <Typography
+          sx={{ p: 2, bgcolor: "#262626", maxWidth: "600px", color: "#a6a6a6" }}
+        >
+          <div className="instructions-pop">
+            <h2>Farkel is a classic dice rolling, risk taking game.</h2>
+            <p>
+              <strong>Object</strong>: Be the player with the highest score over
+              10,000.
+            </p>
+            <h4>Gameplay</h4>
+            <ul>
+              <li>
+                A players turn begins by rolling all six Dice. After each roll,
+                select Dice that are worth points for scoring (see scoring tab
+                above). You must remove at least one Dice after each roll.
+              </li>
+              <li>
+                To get on the Scorecard for the first time, you must have at
+                least 500 points before you stop rolling.
+              </li>
+              <li>
+                If you’re lucky enough to select all six Dice, you can roll them
+                all again to build your round total.
+              </li>
+              <li>
+                If you cannot select any Dice after a roll, that’s a Farkel. You
+                lose your round total and play passes to the next player. A
+                Farkel could happen on your first roll or when you roll the
+                remaining Dice.
+              </li>
+              <li>
+                After your first score of 500 points or more is recorded, you
+                may stop rolling at any time and add your round total to your
+                accumulated score.
+              </li>
+            </ul>
+            <p>
+              <strong>Winning</strong>: When a player’s accumulated score is
+              10,000 or more, each of the other players has one last turn to
+              beat that total. The player with the highest score wins.
+            </p>
+          </div>
+        </Typography>
+      </Popover>
+    </>
   );
 };
-
 export default Instructions;

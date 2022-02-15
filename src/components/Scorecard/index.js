@@ -7,7 +7,7 @@ const Scorecard = () => {
 
   return (
     <div className="scorecard">
-      <h3>Scorecard</h3>
+      <h2>Scorecard</h2>
       {players.map((player) => {
         return (
           <div key={player.name}>

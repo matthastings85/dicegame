@@ -1,16 +1,17 @@
 import React from "react";
+import Media from "react-media";
 
 // Components
 import Scorecard from "./Scorecard";
 import Turn from "./Turn";
-import Instructions from "./Instructions";
+import Scoring from "./Scoring";
 
 const Game = () => {
   return (
     <div className="game-wrapper">
-      <Instructions />
+      <Media query="(min-width: 1000px)" render={() => <Scoring />} />
       <Turn />
-      <Scorecard />
+      <Media query="(min-width: 1000px)" render={() => <Scorecard />} />
     </div>
   );
 };
