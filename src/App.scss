@@ -2,8 +2,10 @@
 $grey: #3d3d3d;
 $darkGrey: #262626;
 $lightGrey: #a6a6a6;
+$lightGrey30: #a6a6a67e;
 $green: #84b026;
 $purple: #a660eb;
+$purple50: #a660eb86;
 $white: #f2f2f2;
 
 body {
@@ -13,7 +15,10 @@ body {
 .App {
   margin: 0;
   width: 100%;
+  display: flex;
   text-align: center;
+  flex-direction: column;
+  height: 100%;
   color: $white;
   font-size: 1.2rem;
 }
@@ -59,7 +64,7 @@ body {
 
 @mixin btn {
   display: block;
-  width: 350px;
+  width: 300px;
   padding: 15px;
   margin: 10px;
   font-size: 1.5rem;
@@ -71,12 +76,14 @@ button {
   @include btn;
   background-color: $purple;
   color: $white;
-  box-shadow: 0 0 1px 2px $lightGrey;
+  border: 1px solid $lightGrey;
+  box-shadow: 0 12px 40px -12px $grey;
   cursor: pointer;
 }
 
 button:hover {
-  box-shadow: 0 0 1px 5px $lightGrey;
+  background-color: $white;
+  color: $purple;
 }
 
 .no-styles {
@@ -84,12 +91,15 @@ button:hover {
   padding: 0;
   background-color: transparent;
   box-shadow: none;
+  border: none;
   margin: 0;
   font-size: inherit;
   color: $white;
 }
 .no-styles:hover {
   box-shadow: none;
+  background-color: transparent;
+  border: none;
 }
 
 #ng-btn {
@@ -129,6 +139,15 @@ button:hover {
   h3 {
     margin: 10px;
   }
+}
+
+.game-home-wrapper {
+  flex-grow: 2;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  align-items: stretch;
+  margin-bottom: 10px;
 }
 
 .scorecard {
@@ -172,8 +191,10 @@ button:hover {
   }
 }
 .game-wrapper {
+  width: 100%;
   display: flex;
   justify-content: space-around;
+  align-items: stretch;
 }
 
 .turn-container {
@@ -216,25 +237,10 @@ button:hover {
 .click-div {
   cursor: pointer;
   border-radius: 10%;
-  animation: spin 0.3s 3 linear, scale 0.3s 3 ease-out;
+  animation: spin 0.2s 3 ease-in-out;
 }
 .click-div:hover {
   border: 2px solid $lightGrey;
-}
-
-@keyframes scale {
-  0% {
-    transform: translateY(0);
-  }
-  25% {
-    transform: translateY(20px);
-  }
-  50% {
-    transform: translateY(0);
-  }
-  75% {
-    transform: translateY(20px);
-  }
 }
 
 @keyframes spin {
