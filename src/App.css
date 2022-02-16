@@ -56,9 +56,17 @@ body {
   margin: 10px 15px;
 }
 
+@media screen and (max-width: 500px) {
+  #question,
+#newGame,
+#scoring,
+#score {
+    margin: 10px;
+  }
+}
 button {
   display: block;
-  width: 300px;
+  width: 275px;
   padding: 15px;
   margin: 10px;
   font-size: 1.5rem;
@@ -66,14 +74,12 @@ button {
   border-radius: 20px;
   background-color: #a660eb;
   color: #f2f2f2;
-  border: 1px solid #a6a6a6;
-  box-shadow: 0 12px 40px -12px #3d3d3d;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #f2f2f2;
-  color: #a660eb;
+  background-color: #a660ebb4;
 }
 
 .no-styles {
@@ -93,19 +99,6 @@ button:hover {
   border: none;
 }
 
-#ng-btn {
-  font-size: 1rem;
-  padding: 5px;
-  width: 100px;
-  border-radius: 10px;
-  background-color: #3d3d3d;
-}
-
-#ng-btn:hover {
-  background-color: #a660eb;
-  box-shadow: 0 0 1px 3px #a6a6a6;
-}
-
 .home-wrapper {
   display: flex;
   flex-direction: column;
@@ -113,7 +106,7 @@ button:hover {
 }
 .home-wrapper input {
   display: block;
-  width: 300px;
+  width: 275px;
   padding: 15px;
   margin: 10px;
   font-size: 1.5rem;
@@ -148,7 +141,6 @@ button:hover {
   color: #a660eb;
   padding: 10px;
   flex-basis: 28%;
-  border: 1px solid #3d3d3d;
   border-radius: 10px;
 }
 .scorecard h2 {
@@ -158,7 +150,6 @@ button:hover {
 .instructions-wrapper {
   text-align: center;
   flex-basis: 28%;
-  border: 1px solid #3d3d3d;
   border-radius: 10px;
   padding: 10px;
 }
@@ -190,7 +181,6 @@ button:hover {
   flex-direction: column;
   align-items: center;
   flex-basis: 40%;
-  border: 1px solid #3d3d3d;
   border-radius: 10px;
 }
 
@@ -231,7 +221,7 @@ button:hover {
 }
 
 .click-div:hover {
-  border: 2px solid #a6a6a6;
+  box-shadow: rgba(255, 255, 255, 0.16) 0px 3px 6px, rgba(255, 255, 255, 0.23) 0px 3px 6px;
 }
 
 @keyframes spin {
