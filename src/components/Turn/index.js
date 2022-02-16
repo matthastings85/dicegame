@@ -6,12 +6,13 @@ import { Context } from "../../context";
 // Components
 import Button from "../Button";
 import TurnTransition from "../TurnTransition";
+import DiceContainer from "../DiceContainer";
 
 // Utilities
 import { farkelCheck, sortDice, getScore } from "../../scoring";
-import { one, two, three, four, five, six } from "../../utilities";
 
 const Turn = () => {
+  // Context from PlayerProvider. State values needed universally in app.
   const [players, setPlayers, _active, _setActive, gameOver, setGameOver] =
     useContext(Context);
   // This keeps track of the score for a single turn
@@ -30,6 +31,8 @@ const Turn = () => {
   const [farkel, setFarkel] = useState(false);
   // Transition screen to show scores and next player
   const [transition, setTransition] = useState(false);
+  // Final Round alert
+  const [finalRound, setFinalRound] = useState(false);
 
   // Player information
   const playersCopy = players.slice();
@@ -38,7 +41,7 @@ const Turn = () => {
   const startRoundScore = playersCopy[playerIndex].score;
   let winner;
 
-  // Check for game over
+  // Check for game over and set winner
   if (playersCopy[playerIndex].endGame) {
     let max = 0;
     let maxIndex = 0;
@@ -64,11 +67,12 @@ const Turn = () => {
         turn.push(curRoll);
       }
     }
+    // Set roll to be displayed.
     setRoll(turn);
 
     // Sort dice for Farkel check;
     const sorted = await sortDice(turn);
-    // Check for Farkel and set roll
+    // Check for Farkel
     const farkeled = await farkelCheck(sorted);
     if (farkeled) {
       setFarkel(true);
@@ -76,6 +80,7 @@ const Turn = () => {
     }
   };
 
+  // Takes the selected dice, sorts them, and get score. Then updates the current players score and removes the scoring dice from the active dice. Then resets for the next round of rolling and scoring.
   const scoreRoll = async () => {
     // Sort selected dice for scoring:
     const sorted = await sortDice(selected);
@@ -110,6 +115,17 @@ const Turn = () => {
     setRoll(updatedRoll);
   };
 
+  // remove dice from selected arr and put it back into the roll arr
+  const deSelectDice = async (event) => {
+    const index = event.target.id;
+    const updatedRoll = selected.slice();
+    const spliced = updatedRoll.splice(index, 1);
+
+    await setRoll([...roll, spliced]);
+    setSelected(updatedRoll);
+  };
+
+  // Wraps up players turn and gets everything set for the next player.
   const finishTurn = () => {
     // Set player score
     playersCopy[playerIndex].score = startRoundScore + score;
@@ -122,9 +138,10 @@ const Turn = () => {
       playersCopy[playerIndex + 1].myTurn = true;
       playersCopy[playerIndex].myTurn = false;
     }
-    // Check to see if current player has reached 10,000 points - set endGame to true
+    // Check to see if current player has reached 10,000 points - set endGame to true, set finalRound to true
     if (playersCopy[playerIndex].score >= 10000) {
       playersCopy[playerIndex].endGame = true;
+      setFinalRound(true);
     }
 
     // Update player Context
@@ -146,6 +163,7 @@ const Turn = () => {
       {!gameOver && !transition && (
         <div className="turn">
           <h2>{`Current Player: ${activeName}`}</h2>
+          {finalRound && <h2 className="purple">Final Round!</h2>}
           <h3>Round Score: {farkel ? 0 : score}</h3>
           {rolling && (
             <Button
@@ -155,56 +173,19 @@ const Turn = () => {
             />
           )}
           {roll.length > 0 && <h3>Current Roll</h3>}
-          <div className="dice-container">
-            {roll.map((dice, index) => {
-              let displayRoll;
-              dice == 1
-                ? (displayRoll = one)
-                : dice == 2
-                ? (displayRoll = two)
-                : dice == 3
-                ? (displayRoll = three)
-                : dice == 4
-                ? (displayRoll = four)
-                : dice == 5
-                ? (displayRoll = five)
-                : (displayRoll = six);
-              return (
-                <div
-                  className="click-div m-5"
-                  key={index}
-                  id={index}
-                  onClick={selectDice}
-                >
-                  {displayRoll}
-                </div>
-              );
-            })}
-          </div>
+          <DiceContainer
+            diceArr={roll}
+            onClick={selectDice}
+            classes="click-div m-5"
+          />
           {roll.length > 0 && !farkel && <h4>select dice for scoring</h4>}
           {farkel && <h2 className="purple font-large">FARKEL!</h2>}
           {selected.length > 0 && <h3>Selected for scoring</h3>}
-          <div className="dice-container">
-            {selected.map((dice, index) => {
-              let display;
-              dice == 1
-                ? (display = one)
-                : dice == 2
-                ? (display = two)
-                : dice == 3
-                ? (display = three)
-                : dice == 4
-                ? (display = four)
-                : dice == 5
-                ? (display = five)
-                : (display = six);
-              return (
-                <div className="m-5" key={index}>
-                  {display}
-                </div>
-              );
-            })}
-          </div>
+          <DiceContainer
+            diceArr={selected}
+            onClick={deSelectDice}
+            classes="click-div m-5"
+          />
           {scoring && !farkel && selected.length > 0 && (
             <Button
               text="Score Selected"
@@ -227,7 +208,7 @@ const Turn = () => {
       {gameOver && (
         <div>
           <h2>Game Over</h2>
-          <h1>{`The winner is ${winner}`}</h1>
+          <h1>{`${winner} wins!`}</h1>
         </div>
       )}
     </div>
