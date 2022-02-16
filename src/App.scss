@@ -80,7 +80,7 @@ body {
   border-radius: 20px;
 }
 
-button {
+.styled-btn {
   @include btn;
   background-color: $purple;
   color: $white;
@@ -91,7 +91,7 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+.styled-btn:hover {
   background-color: $purple50;
 }
 

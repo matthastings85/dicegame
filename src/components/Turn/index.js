@@ -163,6 +163,7 @@ const Turn = () => {
       {!gameOver && !transition && (
         <div className="turn">
           <h2>{`Current Player: ${activeName}`}</h2>
+          {/* Final round alert */}
           {finalRound && <h2 className="purple">Final Round!</h2>}
           <h3>Round Score: {farkel ? 0 : score}</h3>
           {rolling && (
@@ -179,6 +180,7 @@ const Turn = () => {
             classes="click-div m-5"
           />
           {roll.length > 0 && !farkel && <h4>select dice for scoring</h4>}
+          {/* Farkel alert! */}
           {farkel && <h2 className="purple font-large">FARKEL!</h2>}
           {selected.length > 0 && <h3>Selected for scoring</h3>}
           <DiceContainer
@@ -202,9 +204,11 @@ const Turn = () => {
           )}
         </div>
       )}
+      {/* Transition screen */}
       {transition && !gameOver && (
         <TurnTransition callback={setTransition} player={activeName} />
       )}
+      {/* Game Over screen  */}
       {gameOver && (
         <div>
           <h2>Game Over</h2>

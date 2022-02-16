@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import { Context } from "../../context";
 
 const Scorecard = () => {
-  const [players, setPlayers, active, setActive] = useContext(Context);
+  const [players, _setPlayers, _active, _setActive] = useContext(Context);
 
   return (
     <div className="scorecard">

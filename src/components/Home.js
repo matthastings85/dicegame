@@ -7,7 +7,7 @@ import Button from "./Button";
 import { Context } from "../context";
 
 const Home = () => {
-  const [players, setPlayers, active, setActive] = useContext(Context);
+  const [_players, setPlayers, _active, setActive] = useContext(Context);
   const [input, setInput] = useState("");
   const [playerArr, setPlayerArr] = useState([]);
 

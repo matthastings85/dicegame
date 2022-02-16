@@ -5,6 +5,8 @@ import { Tooltip, Popover, Typography } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // Icon
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons";
 
 const Instructions = () => {
@@ -85,6 +87,18 @@ const Instructions = () => {
             </p>
           </div>
         </Typography>
+        <IconButton
+          aria-label="close"
+          onClick={handleClose}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
       </Popover>
     </>
   );

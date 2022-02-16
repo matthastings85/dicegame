@@ -1,22 +1,15 @@
-import React, { useContext, useState } from "react";
-import { Tooltip, Popover, Typography } from "@mui/material";
+import React, { useContext } from "react";
+import { Tooltip } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Media from "react-media";
 
 // Components
-import Scorecard from "../Scorecard";
-import Scoring from "../Scoring";
 import Instructions from "../Instructions";
 import ScoringPop from "../ScoringPop";
 import ScorecardPop from "../ScorecardPop";
 
 // Icon Styles
-import {
-  faCircleQuestion,
-  faPlusSquare,
-  faCircleCheck,
-  faClipboard,
-} from "@fortawesome/free-regular-svg-icons";
+import { faPlusSquare } from "@fortawesome/free-regular-svg-icons";
 
 // Context
 import { Context } from "../../context";
@@ -24,19 +17,6 @@ import { Context } from "../../context";
 const Header = () => {
   const [_players, setPlayers, active, setActive, _gameOver, setGameOver] =
     useContext(Context);
-
-  const [anchorEl, setAnchorEl] = useState(null);
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
 
   const newGame = () => {
     setActive(false);

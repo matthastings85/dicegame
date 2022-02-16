@@ -6,6 +6,8 @@ import { Tooltip, Popover, Typography } from "@mui/material";
 import Scorecard from "../Scorecard";
 
 // Icons
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 import { faClipboard } from "@fortawesome/free-regular-svg-icons";
 
 const ScorecardPop = () => {
@@ -43,6 +45,18 @@ const ScorecardPop = () => {
           sx={{ p: 0, minWidth: "350px", bgcolor: "#262626", color: "#a6a6a6" }}
         >
           <Scorecard />
+          <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            sx={{
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
         </Typography>
       </Popover>
     </>
