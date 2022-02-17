@@ -116,3 +116,18 @@ export const sixSmall = (
     </div>
   </div>
 );
+export const fiveLarge = (
+  <div className="large-dice face">
+    <div className="column">
+      <span className="large-dot"></span>
+      <span className="large-dot"></span>
+    </div>
+    <div className="column mid">
+      <span className="large-dot"></span>
+    </div>
+    <div className="column">
+      <span className="large-dot"></span>
+      <span className="large-dot"></span>
+    </div>
+  </div>
+);

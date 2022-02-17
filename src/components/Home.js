@@ -1,7 +1,9 @@
 import React, { useState, useContext } from "react";
+import Media from "react-media";
 
 // Components
 import Button from "./Button";
+import { fiveLarge, five } from "../utilities";
 
 // Context
 import { Context } from "../context";
@@ -36,6 +38,11 @@ const Home = () => {
 
   return (
     <div className="home-wrapper">
+      <Media query="(min-width: 600px)" render={() => fiveLarge} />
+      <Media query="(max-width: 600px)" render={() => five} />
+      <h2 className="purple">
+        Farkel is a classic dice rolling, risk taking game.
+      </h2>
       <h4>Add 2 or more players to begin</h4>
       <input
         type="text"

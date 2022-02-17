@@ -250,6 +250,25 @@ body {
   pointer-events: none;
 }
 
+.large-dice {
+  padding: 10px;
+  background-color: #a660eb;
+  width: 150px;
+  height: 150px;
+  border-radius: 10%;
+  pointer-events: none;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  margin: 20px;
+}
+.large-dice .large-dot {
+  display: block;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  background-color: white;
+  pointer-events: none;
+}
+
 .small-dice {
   padding: 2px;
   background-color: #a660eb;
