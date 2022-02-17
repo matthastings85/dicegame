@@ -56,7 +56,7 @@ const Instructions = () => {
             <h4>Gameplay</h4>
             <ul>
               <li>
-                A players turn begins by rolling all six Dice. After each roll,
+                A player's turn begins by rolling all six Dice. After each roll,
                 select Dice that are worth points for scoring (see scoring tab
                 above). You must remove at least one Dice after each roll.
               </li>

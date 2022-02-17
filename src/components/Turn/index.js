@@ -55,7 +55,7 @@ const Turn = () => {
     setGameOver(true);
   }
 
-  // receives the number of active dice and generates the roll, sorts, and checks for farkel;
+  // receives the number of active dice and generates the roll, sorts, and checks for farkel
   const rollDice = async () => {
     setRolling(false);
     setScoring(true);
@@ -67,10 +67,10 @@ const Turn = () => {
         turn.push(curRoll);
       }
     }
-    // Set roll to be displayed.
+    // Set roll to be displayed
     setRoll(turn);
 
-    // Sort dice for Farkel check;
+    // Sort dice for Farkel check
     const sorted = await sortDice(turn);
     // Check for Farkel
     const farkeled = await farkelCheck(sorted);
@@ -80,7 +80,7 @@ const Turn = () => {
     }
   };
 
-  // Takes the selected dice, sorts them, and get score. Then updates the current players score and removes the scoring dice from the active dice. Then resets for the next round of rolling and scoring.
+  // Takes the selected dice, sorts them, and gets score. Then updates the current players score and removes the scoring dice from the active dice. Then resets for the next round of rolling and scoring.
   const scoreRoll = async () => {
     // Sort selected dice for scoring:
     const sorted = await sortDice(selected);
@@ -138,7 +138,7 @@ const Turn = () => {
       playersCopy[playerIndex + 1].myTurn = true;
       playersCopy[playerIndex].myTurn = false;
     }
-    // Check to see if current player has reached 10,000 points - set endGame to true, set finalRound to true
+    // Check to see if current player has reached 10,000 points - set endGame to true, set final round to true
     if (playersCopy[playerIndex].score >= 10000) {
       playersCopy[playerIndex].endGame = true;
       setFinalRound(true);
