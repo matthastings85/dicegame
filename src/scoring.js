@@ -83,6 +83,7 @@ export const getScore = async (sorted) => {
 
     checkReamining(3);
   };
+
   // helper function to check for additional 1s
   const check1s = () => {
     if (ones.length > 0) {
@@ -90,6 +91,7 @@ export const getScore = async (sorted) => {
       remove = remove + ones.length;
     }
   };
+
   // helper function to check for additional 5s
   const check5s = () => {
     if (fives.length > 0) {
@@ -118,6 +120,7 @@ export const getScore = async (sorted) => {
       : check1s5s();
   };
 
+  // This is the actual scoring logic that makes use of all the above.
   if (sixOfAKind.length === 1) {
     points = sixOfAKindPoints;
     return { points, remove };
