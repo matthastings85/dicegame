@@ -87,6 +87,8 @@ const Turn = () => {
 
     const { points, remove } = await getScore(sorted);
 
+    if (points === 0) return;
+
     // Set score and remove dice that are scoring:
     setScore(score + points);
     if (activeDice - remove === 0) {
